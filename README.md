@@ -2,24 +2,27 @@
 
 ## Project Description
 
-Here goes your awesome project description!
+A Tuition reimbursement system that allows a user to send in a request and elevated users to approve or deny the request for reimbursement.
 
 ## Technologies Used
 
-* Tech 1 - version 1.0
-* Tech 2 - version 2.0
-* Tech 3 - version 3.0
+* Python3 - version 3.9
+* AWS Database
+* JavaScript
+* Cucumber
+* Selenium
+
 
 ## Features
 
 List of features ready and TODOs for future development
-* Awesome feature 1
-* Awesome feature 2
+* Login system
+* Different views based on employee status
 * Awesome feature 3
 
 To-do list:
-* Wow improvement to be done 1
-* Wow improvement to be done 2
+* Impliment submit button for Requests
+* populating Data to manipulate
 
 ## Getting Started
    
@@ -35,10 +38,6 @@ To-do list:
 ## Usage
 
 > Here, you instruct other people on how to use your project after they’ve installed it. This would also be a good place to include screenshots of your project in action.
-
-## Contributors
-
-> Here list the people who have contributed to this project. (ignore this section, if its a solo project)
 
 ## License
 
