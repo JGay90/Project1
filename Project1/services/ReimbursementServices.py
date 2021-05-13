@@ -12,14 +12,15 @@ class ReimbursementService:
 
     @staticmethod
     def get_by_employeeID(eid):
-        return ReimbursementDAO.get_by_EID(int(eid))
+        returned = ReimbursementDAO.get_by_EID(int(eid))
+        return returned
     @staticmethod
     def create_request(request):
         return ReimbursementDAO.create_req(request)
 
     @staticmethod
     def check_available(eid):
-        return ReimbursementDAO.check_available_funds(int(eid))
+        return ReimbursementDAO.check_available_funds(eid)
     @staticmethod
     def get_by_supervisor(sid):
         return ReimbursementDAO.get_by_supervisor(int(sid))
@@ -34,3 +35,7 @@ class ReimbursementService:
     @staticmethod
     def update_request(req):
         return ReimbursementDAO.update_request(req)
+
+    @staticmethod
+    def denied(rq):
+       return ReimbursementDAO.denied(rq)

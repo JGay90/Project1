@@ -49,11 +49,12 @@ class LoginUserDAO:
         cursor = dbc.cursor()
         cursor.execute(sql, [e.eid])
         record = cursor.fetchone()
-        # rec = record
+        rec = e.eid
         # print("------depHead pick-----")
         # print(rec)
         # print("should be printing L here")
-        if e.eid in record:
+
+        if rec in record:
             login =UserLogin(username=u.un, password=u.pw, eid=int(e.eid),depHead=True)
             # l = login
             # print(l.json())
@@ -81,8 +82,12 @@ class LoginUserDAO:
             login = UserLogin(username=u.un, password=u.pw, eid=int(e.eid),benco=True)
             # print(login)
             return login.json()
+        else:
+           return ul
 
-
+    @staticmethod
+    def pickEmployee(ul):
+        pass
 
 
 def _test():

@@ -19,19 +19,19 @@ class UserLogin:
         }
 
     def __repr__(self):
-        return (dict(un=self.un,pw=self.pw))
+        return (dict(un=self.un,pw=self.pw,eids=self.eid,supervisor=self.supervisor,depHead=self.depHead,benco=self.benco))
 
     @staticmethod
     def json_parse(json):
         ul = UserLogin()
-        print(json.values())
+        # print(json.values())
         # print(type(json))
         ul.un = json["username"]
         ul.pw = json["password"]
         ul.eid = json["eids"]
-        ul.supervisor = json["supervisor"]
-        ul.depHead = json["depHead"]
-        ul.benco = json["benco"]
+        ul.supervisor = json["supervisor"] if"supervisor" in json else False
+        ul.depHead = json["depHead"] if"depHead" in json else False
+        ul.benco = json["benco"] if"benco" in json else False
         return ul
 
 

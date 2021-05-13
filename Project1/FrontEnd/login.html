@@ -54,7 +54,7 @@
       username : un,
       password :pw,
       eids: id,
-      supervisor :supervisorflag,
+      supervisor: supervisorflag,
       depHead: depheadflag,
       benco: bencoflag
     }
@@ -72,30 +72,39 @@
           let req = JSON.parse(this.responseText)
           console.log("Debug request Parse")
           console.log(this.responseText)
-          console.log(req[0].depHead)
+         console.log(req);
           
-            if(req[0].benco== true){
-             window.location.href="Benco_View.html";
-            console.log("you got to benco")
+         if(id = 5){
+            window.location.href="Benco_View.html";
           }
-            else if (req[0].depHead == true){            
-              window.location.href="DepartmentHead_View.html";
-              console.log("you got to DH")
-            }
-              else if(req[0].supervisor == true){
-              window.location.href="Supervisor_View.html"
-                console.log("you got to super")
-              }
+          
+          if (id = 2){
+            window.location.href="DepartmentHead_View.html";
+        }
+          
+          //   if(req[0].supervisor== true){
+          //    window.location.href="Supervisor_View.html"
+          //       console.log("you got to super")
+          // }
+          //   else if (req[0].depHead == true){            
+          //    window.location.href="DepartmentHead_View.html";
+          //     console.log("you got to DH")
+          //   }
+          //     else if(req[0].benco == true){
+          //  window.location.href="Benco_View.html";
+          //   console.log("you got to benco")
+              
+          //     }
                                                          
-              else if(req[0].benco == false && req[0].depHead == false && req[0].supervisor == false){
-              window.location.href="reimbursement.html"
-             console.log("you got here where you don't want to be!")
+             if(id == 4){
+              window.location.href="reimbursementForm.html"
+            //  console.log("you got here where you don't want to be!")
             }
           }
        }
        url = "http://127.0.0.1:5000/login/valid";
       xht.open("POST",url,true);
-      let body ={
+      let body = {
       username : un,
       password :pw,
       eids: id,
@@ -108,6 +117,7 @@
     xht.send(JSON.stringify(body));
     console.log("Sent Json...")
   }
+  
       </script>
         <div class="container-fluid" style = "width: 450px; align-center;background-color:dimgray;">
           <div class="col-xs-2" style= "width: 60px; margin-bottom: -15px;" >

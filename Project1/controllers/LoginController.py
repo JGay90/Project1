@@ -15,22 +15,28 @@ def route(app):
     @app.route("/login/valid", methods=['POST'])
     def checkStatus():
         ul = UserLogin.json_parse(request.json)
-        if (LoginService.pickBenco(ul.json()) == True):
-            # print("Returned Benco")
-            return jsonify(ul.json()), 200
-        elif (LoginService.PickDepHead(ul.json()).depHead == True):
+        print(ul.__repr__())
+        if ul.eid == 2:
             # print("returned Dept. Head")
             ul.depHead = True
-            u = ul
-            return jsonify(ul.json(), 200)
-        elif (LoginService.pickSuper(ul.json()).supervisor == True):
+            # u = ul
+            #
+
+
+        if ul.eid == 1:
             # print("Returned Supervisor")
             ul.supervisor = True
-            return jsonify(ul.json(), 200)
-        elif (LoginService.pickBenco(ul.json()) == True):
-                # print("Returned Benco")
-                ul.benco = True
-                return jsonify(ul.json()), 200
-        else:
-            # print("Returned Employee")
-            return jsonify(ul.json(), 200)
+
+
+        if ul.eid == 5:
+            # print("Returned Benco")
+            ul.benco = True
+
+
+        if ul.eid == 4:
+            ul.benco = False
+            ul.depHead = False
+            ul.supervisor=False
+
+
+        return jsonify(ul.json(), 200)

@@ -19,3 +19,7 @@ class LoginService:
     @staticmethod
     def pickSuper(ul):
         return LoginUserDAO.pickSuper(ul)
+
+    @staticmethod
+    def pickEmployee(ul):
+        return LoginUserDAO.pickEmployee(ul)

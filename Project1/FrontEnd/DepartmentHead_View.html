@@ -20,13 +20,161 @@
           <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-      
+          <script>
+            emid = ""
+            price=""
+            courseType = ""
+            stdate = ""
+             function myFunction() {
+              var x = document.getElementById("approval-pending");
+              var y = document.getElementById("request");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                    y.style.display = "none";
+                    getData();
+                 } else {
+                 x.style.display = "none";
+                 y.style.display = "none";
+               }
+             }
+     
+             function myFunction1(){
+               var x = document.getElementById("approval-pending")          
+             
+               var y = document.getElementById("request");
+               if(y.style.display ==="none"){
+                 y.style.display ="block";
+                 x.style.display = "none";
+               }else{
+                 y.style.display = "none";
+                 x.style.display = "none";
+               }
+     
+             }
+               function submitRequest(){
+                 emid = document.getElementById("eid").value;
+                price = document.getElementById("amount").value;
+                courseType = document.getElementById("course").value;
+                stdate = document.getElementById("sdate").value;
+                 
+                 let xhttp = new XMLHttpRequest();
+                 xhttp.onreadystatechange = function () {
+                   if (this.readyState == 4 && this.status == 200) {
+                         console.log(this.responseText)
+                 }
+                 else{
+                   console.log("Not validated")
+                 }
+                 }
+                 url = "http://127.0.0.1:5000/request_form"
+     
+                 xhttp.open("POST",url,true);
+                 let r = {
+                   EmployeeID :emid,
+                   Amount: price,
+                   CourseID:courseType,
+                   StartDate :stdate
+                 }
+               xhttp.setRequestHeader('Content-type','application/json; charset=utf-8')
+               console.log(r)
+               xhttp.send(JSON.stringify(r));
+               console.log("Sent Json...")
+     
+           
+               }
+     
+             function getData(eid){
+               var dataArray = new Array
+               var innerArray = new Array
+               const xhr = new XMLHttpRequest();
+               url = "http://127.0.0.1:5000/all_Requests"
+               xhr.open("POST",url,true)
+               let b = {
+                 EmployeeID : eid
+               }
+               
+              
+                
+               xhr.send(b);
+               xhr.onreadystatechange = () => {
+                 try{
+                  const jsum = JSON.parse(xhr.responseText);
+                   innerArray.push(jsum.split(", {"));                 
+                  for ( i = 0;i < innerArray[0].length; i++){
+                      text = innerArray[0][i].toString();
+
+                   var jsonStr2 = '"' + text.replace(/ /g, '", "').replace(/=/g, '": "');
+                   console.log(jsonStr2)
+     
+                  dataArray.push(jsonStr2.split(","));  
+                    }
+
+                   changeText2(dataArray);
+                   
+                  }
+                  catch(e){
+                    console.log("got an error")
+                  }
+                
+               };
+             }
+             
+             function popTable(dataArray){
+               console.log("got here to popTable");
+               changeText2();
+              
+             }
+           function changeText2(dataArray) {
+              let listItem = document.getElementById("requestid")
+            for (let value of dataArray) {
+            listValue = document.createElement("option");
+            listValue.textContent = value;
+            listItem.appendChild(listValue);
+}
+              }
+
+              function subString1(){
+                let listItem = document.getElementById("requestid")
+               str = listItem.options[listItem.selectedIndex].text
+               str_sub = /\d/.exec(str)
+               str1 = str_sub[0].toString()
+               emid1 = str.substr(24,21);
+               eid = /\d/.exec(emid1)
+               console.log(eid);
+                emid = eid[0].toString();
+                console.log(emid);
+               console.log(str1);
+             //  console.log(answer);
+                
+              }
+              
+              function ApprovalBtn(){
+                subString1();
+                reqID = str1;
+                let flag=new Boolean(false);
+                let b = {
+                  RequestID:reqID,
+                  EmployeeID:emid,
+                  DeptApprove:flag
+                }
+                const xhr = new XMLHttpRequest();
+               url = "http://127.0.0.1:5000/DeptApproved"
+               xhr.open("POST",url,true)
+               xhr.setRequestHeader('Content-type','application/json; charset=utf-8')
+               console.log(b)
+               xhr.send(JSON.stringify(b));
+               console.log(JSON.stringify(b));
+
+              }
+              
+             //document.addEventListener("DOMContentLoaded",() =>{getData(eid)});
+           </script>
           <div class="btn-group dropup">
         <button type="button" class="btn btn-secondary">View Select</button>
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="sr-only">View Selection</span>
         </button>
-        <div class="dropdown-menu"id=selection>
+        <div class="dropdown-menu"id="selection">
           
           <h6 class="dropdown-header">Select a View</h6>
           <a class="dropdown-item" href="#"onclick="myFunction1()">Reimbursement View</a>
@@ -34,98 +182,24 @@
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="login.html">logout</a>
         </div>
-      </div>
-     
-      <script>
-       emid = ""
-       price=""
-       courseType = ""
-       stdate = ""
-
-        function myFunction() {
-         var x = document.getElementById("approval-pending");
-         var y = document.getElementById("request");
-           if (x.style.display === "none") {
-               x.style.display = "block";
-               y.style.display = "none";
-            } else {
-            x.style.display = "none";
-            y.style.display = "none";
-          }
-        }
-
-        function myFunction1(){
-          var x = document.getElementById("approval-pending")          
-        
-          var y = document.getElementById("request");
-          if(y.style.display ==="none"){
-            y.style.display ="block";
-            x.style.display = "none";
-          }else{
-            y.style.display = "none";
-            x.style.display = "none";
-          }
-
-        }
-          function submitRequest(){
-            emid = document.getElementById("eid").value;
-           price = document.getElementById("amount").value;
-           courseType = document.getElementById("course").value;
-           stdate = document.getElementById("sdate").value;
-            let r = {
-              EmployeeID :emid,
-              Amount: price,
-              CourseID:courseType,
-              StartDate :stdate
-            }
-            let xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-              if (this.readyState == 4 && this.status == 200) {
-                    console.log(this.responseText)
-            }
-            else{
-              console.log("Not validated")
-            }
-            }
-            url = "http://127.0.0.1:5000/request_form"
-
-            xhttp.open("POST",url,true);
-
-          xhttp.setRequestHeader('Content-type','application/json; charset=utf-8')
-          console.log(r)
-          xhttp.send(JSON.stringify(r));
-          console.log("Sent Json...")
-
-      
-          }
-
-        function getData(){
-          var data
-
-        }
-
-
-      </script>
-       <div class="container-fluid" style="padding: 50px; display:none;" id="approval-pending"style = 
-       "display:none;">
-      <div class="form-group">
-        <label for=""></label>
-        <select multiple class="custom-select" name="" id="display">
-          <option value=""></option>
-          <option value=""></option>
-          <option value=""></option>
-        </select>
-      </div>
-      <div class="container-fluid" style="padding: 50px;">
-        <div class="btn-group" data-toggle="buttons"id="radio-select">
-            <label class="btn btn-primary">
-                <input type="radio" name="actionBtnGroup" id="update-request" autocomplete="off">Update Request
-            </label>
-            <label class="btn btn-danger">
-                <input type="radio" name="actionBtnGroup" id="deny-request" autocomplete="off">deny Request
-            </label>
-          
+    
         </div>
+          
+       <div class="container" style="padding: 20px; display:none;" id="approval-pending"style = 
+       "display:none;width:450px; height:250px;overflow:hidden; overflow-y: auto;">
+      <ul class="list-group"id ="list"style="">
+        
+      </ul>
+
+      <div class="container-fluid" style="padding: 50px;">
+        <div class="form-group">
+          <label for=""></label>
+          <select class="form-control" name="" id="requestid">
+            
+          </select>
+        </div>
+        <button type="button" class="btn btn-outline-primary"id = "Approved" onClick="ApprovalBtn()">Approve</button>
+        <button type="button" class="btn btn-outline-primary">Deny</button>
       </div>
     </div>
       <div class="container-fluid" style="padding: 50px; display:none;" id="request">

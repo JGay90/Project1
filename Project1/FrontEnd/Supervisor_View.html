@@ -1,174 +1,245 @@
 <!DOCTYPE html>
 <html>
+    <head>
+      <!doctype html>
+      <html lang="en">
+        <head>
+          <title>Title</title>
+          <!-- Required meta tags -->
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      
+          <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <title>Dept.Head</title>
+        </head>
+        <body>
+            
+          <!-- Optional JavaScript -->
+          <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+          <script>
+            emid = ""
+            price=""
+            courseType = ""
+            stdate = ""
+     
+             function myFunction() {
+              var x = document.getElementById("approval-pending");
+              var y = document.getElementById("request");
+                if (x.style.display === "none") {
+                    x.style.display = "block";
+                    y.style.display = "none";
+                    getData();
+                 } else {
+                 x.style.display = "none";
+                 y.style.display = "none";
+               }
+             }
+     
+             function myFunction1(){
+               var x = document.getElementById("approval-pending")          
+             
+               var y = document.getElementById("request");
+               if(y.style.display ==="none"){
+                 y.style.display ="block";
+                 x.style.display = "none";
+               }else{
+                 y.style.display = "none";
+                 x.style.display = "none";
+               }
+     
+             }
+               function submitRequest(){
+                 emid = document.getElementById("eid").value;
+                price = document.getElementById("amount").value;
+                courseType = document.getElementById("course").value;
+                stdate = document.getElementById("sdate").value;
+                 
+                 let xhttp = new XMLHttpRequest();
+                 xhttp.onreadystatechange = function () {
+                   if (this.readyState == 4 && this.status == 200) {
+                         console.log(this.responseText)
+                 }
+                 else{
+                   console.log("Not validated")
+                 }
+                 }
+                 url = "http://127.0.0.1:5000/request_form"
+     
+                 xhttp.open("POST",url,true);
+                 let r = {
+                   EmployeeID :emid,
+                   Amount: price,
+                   CourseID:courseType,
+                   StartDate :stdate
+                 }
+               xhttp.setRequestHeader('Content-type','application/json; charset=utf-8')
+               console.log(r)
+               xhttp.send(JSON.stringify(r));
+               console.log("Sent Json...")
+     
+           
+               }
+     
+             function getData(eid){
+               var dataArray = new Array
+               var innerArray = new Array
+               const xhr = new XMLHttpRequest();
+               url = "http://127.0.0.1:5000/all_Requests"
+               xhr.open("POST",url,true)
+               let b = {
+                 EmployeeID : eid
+               }
+               
+              
+                
+               xhr.send(b);
+               xhr.onreadystatechange = () => {
+                 try{
+                  const jsum = JSON.parse(xhr.responseText);
+                   innerArray.push(jsum.split(", {"));                 
+                  for ( i = 0;i < innerArray[0].length; i++){
+                      text = innerArray[0][i].toString();
 
-<head>
-  <!doctype html>
-  <html lang="en">
+                   var jsonStr2 = '"' + text.replace(/ /g, '", "').replace(/=/g, '": "');
+                   console.log(jsonStr2)
+     
+                  dataArray.push(jsonStr2.split(","));  
+                    }
 
-  <head>
-    <title>Title</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+                   changeText2(dataArray);
+                   
+                  }
+                  catch(e){
+                    console.log("got an error")
+                  }
+                
+               };
+             }
+             
+             function popTable(dataArray){
+               console.log("got here to popTable");
+               changeText2();
+              
+             }
+           function changeText2(dataArray) {
+              let listItem = document.getElementById("requestid")
+            for (let value of dataArray) {
+            listValue = document.createElement("option");
+            listValue.textContent = value;
+            listItem.appendChild(listValue);
+}
+              }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  </head>
+              function subString1(){
+                let listItem = document.getElementById("requestid")
+               str = listItem.options[listItem.selectedIndex].text
+               str_sub = /\d/.exec(str)
+               str1 = str_sub[0].toString()
+               emid1 = str.substr(24,21);
+               eid = /\d/.exec(emid1)
+               console.log(eid);
+                emid = eid[0].toString();
+                console.log(emid);
+               console.log(str1);
+             //  console.log(answer);
+                
+              }
+              
+              function ApprovalBtn(){
+                subString1();
+                reqID = str1;
+                let flag=new Boolean(false);
+                let b = {
+                  RequestID:reqID,
+                  EmployeeID:emid,
+                  BencoApprove:flag
+                }
+                const xhr = new XMLHttpRequest();
+               url = "http://127.0.0.1:5000/DeptApproved"
+               xhr.open("POST",url,true)
+               xhr.setRequestHeader('Content-type','application/json; charset=utf-8')
+               console.log(b)
+               xhr.send(JSON.stringify(b));
+               console.log(JSON.stringify(b));
 
-<body>
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-    crossorigin="anonymous"></script>
-
-  <div class="btn-group dropup">
-    <button type="button" class="btn btn-secondary">View Select</button>
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-      aria-expanded="false">
-      <span class="sr-only">View Selection</span>
-    </button>
-    <div class="dropdown-menu" id=selection>
-
-      <h6 class="dropdown-header">Select a View</h6>
-      <a class="dropdown-item" href="#" onclick="myFunction1()">Reimbursement View</a>
-      <a class="dropdown-item" href="#" onclick="myFunction()">Approval View</a>
-      <a class="dropdown-item" href="#" >Get Requests by Employee</a>
-      <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="login.html">logout</a>
-    </div>
-  </div>
-
-  <script>
-    function myFunction() {
-      var x = document.getElementById("approval-pending");
-      var y = document.getElementById("request");
-      if (x.style.display === "none") {
-        x.style.display = "block";
-        y.style.display = "none";
-      } else {
-        x.style.display = "none";
-        y.style.display = "none";
-      }
-    }
-
-    function myFunction1() {
-      var x = document.getElementById("approval-pending")
-
-      var y = document.getElementById("request");
-      if (y.style.display === "none") {
-        y.style.display = "block";
-        x.style.display = "none";
-      } else {
-        y.style.display = "none";
-        x.style.display = "none";
-      }
-
-      function revealtxtbox() {
-        var y = document.getElementById("deny-request")
-        var z = document.getElementById("txtbox")
-        if (y.hasAttribute(Checked)==true) {
-          z.style.display = "block";
-        } else {
-          z.style.display = "none";
-        }
-
-
-
-
-      }
-
-    }
-
-
-  </script>
-  <div class="container-fluid" style="padding: 50px; display:none;" id="approval-pending" style="display:none;">
-    <table class="table table-striped table-inverse table-responsive">
-      <thead class="thead-inverse">
-        <tr>
-          <th>ID</th>
-          <th>EmployeeID</th>
-          <th>Amount</th>
-          <th>Supervisor</th>
-          <th>Department Head</th>
-          <th>Benefits Coordinator</th>
-          <th>Finalized</th>
-          <th>Course</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td scope="row"></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td scope="row"></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="container-fluid" id=btn-choice style="padding: 50px;">
-      <div class="btn-group" data-toggle="buttons" id="radio-select" >
-        <label class="btn btn-primary active">
-          <input type="radio" name="actionBtnGroup" id="approve-request" autocomplete="off" checked>Approve Request
-        </label>
-        <label class="btn btn-danger">
-          <input type="radio" name="actionBtnGroup" id="deny-request"  autocomplete="off" >deny
-          Request
-        </label>
+              }
+              
+             //document.addEventListener("DOMContentLoaded",() =>{getData(eid)});
+           </script>
+          <div class="btn-group dropup">
+        <button type="button" class="btn btn-secondary">View Select</button>
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <span class="sr-only">View Selection</span>
+        </button>
+        <div class="dropdown-menu"id="selection">
+          
+          <h6 class="dropdown-header">Select a View</h6>
+          <a class="dropdown-item" href="#"onclick="myFunction1()">Reimbursement View</a>
+          <a class="dropdown-item" href="#" onclick="myFunction()" >Approval View</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="login.html">logout</a>
         </div>
-    </div>
-  </div>
-  <div class="container-fluid" style="padding: 50px; display:none;" id="request">
+    
+        </div>
+            <div class="form-group">
+          <label for="">Department</label>
+          <select class="form-control" name="" id="dept">
+            <option>Jpop</option>
+            <option >Kpop</option>
+            <option>Pop</option>
+          </select>
+      </div> 
+       <div class="container" style="padding: 20px; display:none;" id="approval-pending"style = 
+       "display:none;width:450px; height:250px;overflow:hidden; overflow-y: auto;">
+      <ul class="list-group"id ="list"style="">
+        
+      </ul>
 
-    <div class="form-group row">
-      <div class="col-xs-2" style="margin: 2px;">
-        <label for="">EmployeeID</label>
-        <input class="form-control" id="eid" type="text">
-      </div>
-      <div class="col-xs-2" style="margin: 2px;">
-        <label for="">Amount</label>
-        <input class="form-control" id="amount" type="text">
-      </div>
-      <div class="col-xs-2" style="margin: 5px">
-        <label for="">SupervisorID</label>
-        <input class="form-control" id="sid" type="text">
-      </div>
-      <div class="col-xs-2" style="margin: 2px;">
-        <label for="">Department Head</label>
-        <input class="form-control" id="depHeadID" type="text">
-      </div>
-
-      <div class="col-xs-2" style="margin: 2px;">
-        <label for="">Benefits Coordinator ID </label>
-        <input class="form-control" id="bencoID" type="text">
-      </div>
-      <div class="col-xs-2" style="margin: 2px; padding-top: 30px;">
-        <select class="custom-select" name="" id="course">
-          <option selected>Select one</option>
-          <option value="University">University Course</option>
-          <option value="Tech">Tech Training</option>
-          <option value="Certclass">Certification Class</option>
-          <option value="CertTest">Certification Test</option>
-        </select>
-      </div>
-      <div class="col-xs-2" style="margin: 2px; padding-top: 30px;">
-        <input name="" id="submit" class="btn btn-primary btn-sm" type="button" value="Submit Request"
-          style="height:35px;">
+      <div class="container-fluid" style="padding: 50px;">
+        <div class="form-group">
+          <label for=""></label>
+          <select class="form-control" name="" id="requestid">
+            
+          </select>
+        </div>
+        <button type="button" class="btn btn-outline-primary"id = "Approved" onClick="ApprovalBtn()">Approve</button>
+        <button type="button" class="btn btn-outline-primary">Deny</button>
       </div>
     </div>
-  </div>
-</body>
-
+      <div class="container-fluid" style="padding: 50px; display:none;" id="request">
+        
+        <div class="form-group row">
+          <div class="col-xs-2" style ="margin: 2px;">
+            <label for="">EmployeeID</label>
+            <input class="form-control" id="eid" type="text">
+        </div> 
+        <div class="col-xs-2" style ="margin: 2px;">
+          <label for="">Amount</label>
+          <input class="form-control" id="amount" type="text">
+      </div> 
+          <div class="col-xs-2"style="margin: 5px">
+            <label for="">Start Date</label>
+            <input class="form-control" id="sdate" type="text">
+          </div>
+          <div class="col-xs-2" style ="margin: 2px; padding-top: 30px;"> 
+            <select class="custom-select" name="" id="course">
+              <option selected>Select Course Type</option>
+              <option value="University">University Course</option>
+              <option value =" Seminars"> Seminars</option>
+              <option value="Tech">Tech Training</option>
+              <option value="Certclass">Certification Class</option>
+              <option value ="CertTest">Certification Test</option>
+              <option value = "other">Other</option>
+              </select>
+              </div>
+              <div class="col-xs-2" style ="margin: 2px; padding-top: 30px;">
+              <input name="" id="submit" class="btn btn-primary btn-sm" type="button" value="Submit Request" style ="height:35px;" onclick="submitRequest()">
+              </div>
+        </div>
+      </div>
+    </body>
 </html>
