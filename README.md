@@ -16,14 +16,14 @@ A Tuition reimbursement system that allows a user to send in a request and eleva
 ## Features
 
 List of features ready and TODOs for future development
-* Login system
 * Different views based on employee status
-
-
-To-do list:
 * Impliment submit button for Requests
 * populating Data to manipulate
 
+
+To-do list:
+* clean up how the data is displayed
+* fix login System
 ## Getting Started
    
 (include git clone command)
